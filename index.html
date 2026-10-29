@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loto</title>
+<style>
+* { box-sizing: border-box; }
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('./fonts/barlow-condensed.woff2') format('woff2');
+  font-weight: 400 900;
+}
+
+body {
+  margin: 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  background: #183047;
+  color: #f1f4f8;
+}
+
+main {
+  border: 1px sold red;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  height: 100vh;
+  width: 100%;
+  padding-left: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  height: 100%;
+}
+
+.numero {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 100%;
+  background: #183047;
+  color: #e8edf2;
+  opacity: 0.5;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 3rem;
+  font-weight: bold;
+  cursor: pointer;  
+}
+
+.numero.sorti {
+  background: #16a36a;
+  opacity: 1;
+}
+
+.affichage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.boule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #183047;
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: min(85vw, 100vh);
+  font-weight: 900;
+  line-height: 0.85;
+  white-space: nowrap;
+}
+
+</style>
+</head>
+<body>
+
+<main>
+  <section class="panel">
+    <div class="grille" id="grille"></div>
+  </section>
+
+  <section class="panel">
+
+    <div class="affichage">
+      <div class="boule" id="grandNumero">
+        <img
+          src="https://www.beychac-caillau.fr/wp-content/uploads/2016/09/Athletic89f-logo-600x562.png"
+          alt="Logo Athletic 89 FC"
+          id="grandNumero"
+          class="logo"
+        />
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const grille = document.getElementById("grille");
+const grandNumero = document.getElementById("grandNumero");
+
+let historique = [];
+let numeroActuel = null;
+
+// Création des 90 numéros
+for (let n = 1; n <= 90; n++) {
+  const bouton = document.createElement("button");
+  bouton.className = "numero";
+  bouton.textContent = n;
+  bouton.onclick = () => selectionner(n);
+  bouton.id = "numero-" + n;
+  grille.appendChild(bouton);
+}
+
+// Sélection d'un numéro
+function selectionner(n) {
+  if (!historique.includes(n)) {
+    historique.push(n);
+  }
+
+  numeroActuel = n;
+  actualiser();
+}
+
+// Mise à jour de l'affichage
+function actualiser() {
+  grandNumero.textContent = numeroActuel ?? "—";
+
+  document.querySelectorAll(".numero").forEach(bouton => {
+    const n = Number(bouton.textContent);
+    bouton.classList.toggle("sorti", historique.includes(n));
+    bouton.classList.toggle("actuel", n === numeroActuel);
+  });
+
+}
+
+// Annulation du dernier numéro
+function annuler() {
+  historique.pop();
+  numeroActuel = historique.length
+    ? historique[historique.length - 1]
+    : null;
+  actualiser();
+}
+
+// Remise à zéro
+function reinitialiser() {
+  if (confirm("Recommencer une nouvelle partie ?")) {
+    historique = [];
+    numeroActuel = null;
+    actualiser();
+  }
+}
+</script>
+
+</body>
+</html>
