@@ -183,11 +183,19 @@ for (let n = 1; n <= 90; n++) {
 }
 
 function selectionner(n) {
-  if (!historique.includes(n)) {
+  if (historique.includes(n)) {
+    // Le numéro existe déjà : on le retire
+    historique = historique.filter(numero => numero !== n);
+  } else {
+    // Nouveau numéro : on l'ajoute à l'historique
     historique.push(n);
   }
 
-  numeroActuel = n;
+  // Le dernier numéro de l'historique devient le numéro affiché
+  numeroActuel = historique.length
+    ? historique[historique.length - 1]
+    : null;
+
   actualiser();
 }
 
