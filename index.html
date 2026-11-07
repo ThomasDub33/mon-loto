@@ -200,11 +200,18 @@ function selectionner(n) {
 }
 
 function actualiser() {
-  if (logo) {
-    logo.remove();
+  if (numeroActuel === null) {
+    grandNumero.innerHTML = `
+      <img
+        src="logo.png"
+        alt="Logo Athletic 89 FC"
+        class="logo"
+        id="logo"
+      >
+    `;
+  } else {
+    grandNumero.textContent = numeroActuel;
   }
-
-  grandNumero.textContent = numeroActuel ?? "—";
 
   document.querySelectorAll(".numero").forEach(bouton => {
     const n = Number(bouton.textContent);
